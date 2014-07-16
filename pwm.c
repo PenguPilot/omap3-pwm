@@ -280,9 +280,10 @@ static irqreturn_t match_handler(int irq, void *ptr)
 	struct pwm_dev *pd = (struct pwm_dev *)ptr;
 
 	/* read new tmar value: */
-	spin_lock(&pd->lock);
+	unsigned long flags;
+   spin_lock_irqsave(&pd->lock, flags);
 	val = pd->tmar;
-	spin_unlock(&pd->lock);
+	spin_unlock_irqrestore(&pd->lock, flags);
 
 	/* set a new tmar value: */
 	omap_dm_timer_set_match(pd->timer, 1, val);
